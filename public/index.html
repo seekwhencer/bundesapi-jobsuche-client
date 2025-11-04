@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mr. Jobbinger</title>
+    <link rel="stylesheet" href="/css/page.css"/>
+</head>
+<body>
+<div id="modal">
+    <div id="modal-content">
+        <h2>Suchen</h2>
+        <div id="searches-listing"></div>
+        <button id="add-search">Neue Suche</button>
+        <button id="run-search">Alle Suchen starten</button>
+        <button id="close-modal">✖ schliessen</button>
+    </div>
+</div>
+<header>
+    <h1>Mr. Jobbinger</h1>
+    <div class="search-input">
+        <input id="filter" placeholder="Filtern nach Titel, Arbeitgeber, Ort..."/>
+        <div class="searches-actions">
+            <button id="open-searches-filter">Filtern nach Suche</button>
+            <button id="open-modal">Suchen verwalten</button>
+        </div>
+        <button id="load-list">Liste laden</button>
+    </div>
+</header>
+<div id="searches-filter" class="searches-filter">
+</div>
+<div class="page">
+    <div id="list" class="list"></div>
+    <div id="detail" class="detail" style="display:none"></div>
+</div>
+<script type="module" src="/js/page.js"></script>
+</body>
+</html>
