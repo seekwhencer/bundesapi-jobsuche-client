@@ -40,8 +40,9 @@ export default class JobDetail {
     }
 
     flushCards(card) {
-        this.page.listing.element.querySelectorAll('.card').forEach(c =>  c.classList.remove('selected') );
+        this.page.listing.flushCards(card);
     }
+
 }
 
 function esc(s) {

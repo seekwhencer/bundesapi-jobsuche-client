@@ -106,11 +106,21 @@ header {
 
             &:hover {
                 background: #f9f9f9;
+
                 .search {
                     background-color: #666;
                     border-color: var(--color-primary);
                     color: white;
                 }
+
+                .actions {
+                    button {
+                        transition: all 0.1s ease-in-out;
+                        opacity: 1;
+                    }
+                }
+
+
             }
 
             &.selected {
@@ -119,6 +129,32 @@ header {
 
                 .meta, .date {
                     color: white;
+                }
+            }
+
+            &.liked {
+                border-color: var(--color-primary);
+
+                button.like {
+                    transition: all 0.1s ease-in-out;
+                    transform: scale(1.5);
+                    transform-origin: top right;
+                    color: var(--color-primary);
+                    background-color: #ddd;
+                    border-top: none;
+                    opacity: 1;
+                }
+            }
+
+            &.ignored {
+                button.ignore {
+                    transition: all 0.1s ease-in-out;
+                    transform: scale(1.5);
+                    transform-origin: top right;
+                    background-color: #e2f107;
+                    color: #333;
+                    border-top: none;
+                    opacity: 1;
                 }
             }
 
@@ -141,6 +177,25 @@ header {
                 border-radius: 5px;
                 padding: 2px 10px;
                 color: #999;
+            }
+
+            .actions {
+                position: absolute;
+                top: 0;
+                right: 10px;
+
+                button {
+                    margin-left: 20px;
+                    font-size: 20px;
+                    line-height: 20px;
+                    text-align: center;
+                    width: 24px;
+                    height: 24px;
+                    padding: 0;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    opacity: 0.2;
+                }
             }
         }
     }
@@ -268,11 +323,20 @@ header {
     background-color: #999;
 }
 
-#load-list {
+.listing-filter {
     position: absolute;
-    left: 10px;
-    z-index: 1000;
     top: 10px;
+    left: 10px;
+
+    button {
+        display: inline-block;
+        &:nth-child(2), &:nth-child(3) {
+            font-size: 20px;
+            line-height: 34px;
+            padding: 0 10px;
+            transform: translateY(3px);
+        }
+    }
 }
 
 
