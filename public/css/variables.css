@@ -1,5 +1,6 @@
 :root {
     --color-primary: #208d6d;
     --color-secondary: #106048;
+    --color-warning: #8d311c;
     --font-family: system-ui, sans-serif;
 }

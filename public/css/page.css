@@ -330,11 +330,34 @@ header {
 
     button {
         display: inline-block;
+        position: relative;
+
         &:nth-child(2), &:nth-child(3) {
             font-size: 20px;
             line-height: 34px;
             padding: 0 10px;
             transform: translateY(3px);
+        }
+
+        &.included {
+            background-color: var(--color-secondary);
+        }
+
+        &.excluded {
+
+            &:after {
+                transform-origin: center;
+                position: absolute;
+                content: "";
+                width: 47px;
+                height: 2px;
+                top: 16px;
+                left: -5px;
+                overflow: hidden;
+                background-color: white;
+                transform: rotate(45deg);
+
+            }
         }
     }
 }

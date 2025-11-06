@@ -5,6 +5,17 @@ export default class SearchesFilter {
         this.openFilterBtn = document.querySelector('#open-searches-filter');
         this.openFilterBtn.addEventListener('click', () => this.show());
         this.element = document.querySelector('#searches-filter');
+
+        this.listing.listingFilter.on('search', search => {
+            const button = this.element.querySelector(`[data-id="${search.id}"]`);
+
+            if (!button)
+                this.flushButtons({});
+
+            if (button.dataset.id === search.id) {
+                button.classList.add('selected');
+            }
+        });
     }
 
     async show() {
@@ -30,6 +41,7 @@ export default class SearchesFilter {
     renderButton(search) {
         const button = document.createElement("button");
         button.className = "";
+        button.dataset.id = search.id;
         button.innerHTML = `${search.location}${search.radius ? ` (${search.radius}km)` : ''}${search.search ? ` - ${search.search}` : ''}${search.days ? `, ${search.days} Tage` : ''}`;
         button.onclick = (e) => this.filterBySearch(search, e);
         this.element.appendChild(button);
@@ -43,12 +55,9 @@ export default class SearchesFilter {
         const button = e.target;
         this.flushButtons(button);
 
-        if (button.classList.contains('selected')) {
-            button.classList.remove('selected');
-            this.listing.filterBySearch(false);
-        } else {
-            button.classList.add('selected');
-            this.listing.filterBySearch(search);
-        }
+        this.listing.filterQuery.liked = undefined;
+        this.listing.filterQuery.ignored = false;
+
+        search !== this.listing.filterQuery.search ? this.listing.filterQuery.search = search : this.listing.filterQuery.search = false;
     }
 }

@@ -1,5 +1,10 @@
-export default class JobListing {
+import EventEmitter from "./event_emitter.js";
+import ListingFilter from "./listing_filter.js";
+
+export default class JobListing extends EventEmitter {
     constructor(page) {
+        super();
+
         this.page = page;
         this.jobs = this.page.jobs;
         this.detail = this.page.detail;
@@ -10,20 +15,28 @@ export default class JobListing {
         this.loadLikedBtn = document.querySelector("#load-liked");
         this.loadIgnoredBtn = document.querySelector("#load-ignored");
 
-        this.filterElement.addEventListener("input", () => {
-            const q = this.filterElement.value.toLowerCase();
-            this.filterByKeyword(q);
-        });
+        /**
+         * the filter stuff
+         */
+
+        this.filterElement.addEventListener("input", () => this.filterQuery.keyword = this.filterElement.value.toLowerCase());
         this.loadListBtn.onclick = () => this.load();
         this.loadLikedBtn.onclick = () => this.filterByProperty('liked');
         this.loadIgnoredBtn.onclick = () => this.filterByProperty('ignored');
 
-        this.filterQuery = {
-            liked: undefined,
-            ignored: undefined,
-            search: false,
-            keyword: false
-        };
+        this.listingFilter = new ListingFilter(this);
+
+        this.listingFilter.on('liked', liked => liked === true ? this.loadLikedBtn.className = 'included' : liked === false ? this.loadLikedBtn.className = 'excluded' : this.loadLikedBtn.className = '');
+        this.listingFilter.on('ignored', ignored => ignored === true ? this.loadIgnoredBtn.className = 'included' : ignored === false ? this.loadIgnoredBtn.className = 'excluded' : this.loadIgnoredBtn.className = '');
+        this.listingFilter.on('keyword', keyword => null);
+        this.listingFilter.on('update', () => this.filter());
+
+        this.filterQuery = this.listingFilter.query;
+
+        this.filterQuery.liked = undefined;
+        this.filterQuery.ignored = false;
+        this.filterQuery.search = false;
+        this.filterQuery.keyword = false;
     }
 
     async load() {
@@ -31,7 +44,7 @@ export default class JobListing {
             const res = await fetch("/api/list");
             this.jobs = await res.json();
             this.jobs.sort((a, b) => new Date(b.modifikationsTimestamp) - new Date(a.modifikationsTimestamp));
-            this.render();
+            this.filter();
             this.filterElement.value = "";
         } catch (err) {
             this.element.innerHTML = "<p>Fehler beim Laden der Daten.</p>";
@@ -135,28 +148,12 @@ export default class JobListing {
 
     filterByProperty(prop) {
         const availableProps = ['liked', 'ignored'];
-
-        // drop the other
         availableProps.forEach(p => p !== prop ? this.filterQuery[p] = undefined : null);
-
         this.filterQuery[prop] =
             this.filterQuery[prop] === true ? false :
                 this.filterQuery[prop] === false ? undefined :
                     true;
-
-        this.filter();
     }
-
-    filterByKeyword(keyword) {
-        this.filterQuery.keyword = keyword;
-        this.filter();
-    }
-
-    filterBySearch(search) {
-        this.filterQuery.search = search;
-        this.filter();
-    }
-
 }
 
 function esc(s) {
