@@ -12,11 +12,18 @@ export default class JobListing {
 
         this.filterElement.addEventListener("input", () => {
             const q = this.filterElement.value.toLowerCase();
-            this.filter(q);
+            this.filterByKeyword(q);
         });
         this.loadListBtn.onclick = () => this.load();
-        this.loadLikedBtn.onclick = () => this.filter('"liked":true');
-        this.loadIgnoredBtn.onclick = () => this.filter('"ignored":true');
+        this.loadLikedBtn.onclick = () => this.filterByProperty('liked');
+        this.loadIgnoredBtn.onclick = () => this.filterByProperty('ignored');
+
+        this.filterQuery = {
+            liked: undefined,
+            ignored: undefined,
+            search: false,
+            keyword: false
+        };
     }
 
     async load() {
@@ -39,11 +46,8 @@ export default class JobListing {
             const div = document.createElement("div");
             div.className = "card";
 
-            if (j.liked)
-                div.classList.add("liked");
-
-            if (j.ignored)
-                div.classList.add("ignored");
+            j.liked === true ? div.classList.add("liked") : null;
+            j.ignored === true ? div.classList.add("ignored") : null;
 
             div.innerHTML =
                 `<b>${esc(j.titel || j.beruf || "—")}</b>` +
@@ -56,31 +60,6 @@ export default class JobListing {
         }
     }
 
-    filter(q) {
-        let filtered = this.jobs;
-
-        console.log('>>>', q);
-
-        if (typeof q === "string") {
-            this.filterString = q;
-            if (q === '')
-                this.filterString = false;
-        }
-
-        if (typeof q === "object")
-            this.filterSearch = q
-
-        if (!q)
-            this.filterSearch = false;
-
-        if (this.filterString)
-            filtered = filtered.filter((j) => JSON.stringify(j).toLowerCase().includes(this.filterString));
-
-        if (this.filterSearch)
-            filtered = filtered.filter((j) => j.search.id === this.filterSearch.id);
-
-        this.render(filtered);
-    }
 
     flushCards(card) {
         this.element.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
@@ -109,6 +88,7 @@ export default class JobListing {
             card.classList.remove('liked');
             button.innerHTML = '♡';
         }
+        this.updateJob(id, {liked: job.liked});
     }
 
     async ignore(id, card, button) {
@@ -118,6 +98,63 @@ export default class JobListing {
         }
         const job = await res.json();
         job.ignored === true ? card.classList.add('ignored') : card.classList.remove('ignored');
+        this.updateJob(id, {ignored: job.ignored});
+    }
+
+    updateJob(id, data) {
+        this.jobs.forEach((j, i) => {
+            if (j.id === id) {
+                this.jobs[i] = {...j, ...data};
+            }
+        });
+    }
+
+    filter() {
+        let filtered = this.jobs;
+
+        if (this.filterQuery.search)
+            filtered = filtered.filter((j) => j.search.id === this.filterQuery.search.id);
+
+        if (this.filterQuery.keyword)
+            filtered = filtered.filter((j) => JSON.stringify(j).toLowerCase().includes(this.filterQuery.keyword));
+
+        if (this.filterQuery.liked === true)
+            filtered = filtered.filter((j) => j.liked === true);
+
+        if (this.filterQuery.liked === false)
+            filtered = filtered.filter((j) => j.liked !== true);
+
+        if (this.filterQuery.ignored === true)
+            filtered = filtered.filter((j) => j.ignored === true);
+
+        if (this.filterQuery.ignored === false)
+            filtered = filtered.filter((j) => j.ignored !== true);
+
+        this.render(filtered);
+    }
+
+    filterByProperty(prop) {
+        const availableProps = ['liked', 'ignored'];
+
+        // drop the other
+        availableProps.forEach(p => p !== prop ? this.filterQuery[p] = undefined : null);
+
+        this.filterQuery[prop] =
+            this.filterQuery[prop] === true ? false :
+                this.filterQuery[prop] === false ? undefined :
+                    true;
+
+        this.filter();
+    }
+
+    filterByKeyword(keyword) {
+        this.filterQuery.keyword = keyword;
+        this.filter();
+    }
+
+    filterBySearch(search) {
+        this.filterQuery.search = search;
+        this.filter();
     }
 
 }

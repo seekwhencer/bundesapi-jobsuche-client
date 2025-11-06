@@ -33,6 +33,7 @@ export default class JobDetail {
             (job.jobTitles.length > 0
                 ? `<ul class="job-titles">${job.jobTitles.map(j => `<li class="job-title">${j}</li>`).join('')}</ul>`
                 : "") +
+            `${job.externeUrl ? `<a href="${job.externeUrl}" target="_blank">Externer Link zum Job</a>` : ''}` +
             (job.description
                 ? `<div class="description">${(job.description.replaceAll("\n", '<br>'))}</div>`
                 : "") +

@@ -36,7 +36,7 @@ export default class SearchesFilter {
     }
 
     flushButtons(button) {
-        this.element.querySelectorAll('button').forEach(b => b !== button ? b.classList.remove('selected') : null );
+        this.element.querySelectorAll('button').forEach(b => b !== button ? b.classList.remove('selected') : null);
     }
 
     filterBySearch(search, e) {
@@ -45,10 +45,10 @@ export default class SearchesFilter {
 
         if (button.classList.contains('selected')) {
             button.classList.remove('selected');
-            this.listing.filter(false);
+            this.listing.filterBySearch(false);
         } else {
             button.classList.add('selected');
-            this.listing.filter(search);
+            this.listing.filterBySearch(search);
         }
     }
 }
