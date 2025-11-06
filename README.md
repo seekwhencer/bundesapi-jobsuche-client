@@ -10,8 +10,6 @@ Eine Suchhilfe für die Jobsuche der Arbeitsagentur für Arbeit.
 - Liste nach Suche filtern
 - Alle Suchergebnisse landen in einer Liste
 - Keine Dopplungen mehr wie per E-Mail-Suchauftrag
-
-### @TODO
 - Herzchenliste
 - Ignore-Liste
 
