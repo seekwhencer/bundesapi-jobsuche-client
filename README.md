@@ -13,6 +13,27 @@ Eine Suchhilfe für die Jobsuche der Arbeitsagentur für Arbeit.
 - Herzchenliste
 - Ignore-Liste
 
+@TODO
+- Scheduling Such-Aufträge
+
+## Installation
+
+- braucht Node.js für bare metal
+- nix Windows, only WSL (Linux, Ubuntu)
+
+```bash
+git clone https://github.com/seekwhencer/bundesapi-jobsuche-client.git
+cd bundesapi-jobsuche-client
+npm install
+````
+
+## Starten
+```bash
+node ./index.js
+```
+
+> Dann läuft das auf port `3000` auf `http://localhost:3000` - sofern man das auf localhost installiert.
+
 ![Screenshot #1](../master/screenshots/screenshot_01.png?raw=true "Screenshot #1")
 ![Screenshot #2](../master/screenshots/screenshot_02.png?raw=true "Screenshot #2")
 ![Screenshot #3](../master/screenshots/screenshot_03.png?raw=true "Screenshot #3")
