@@ -16,12 +16,10 @@ Eine Suchhilfe für die Jobsuche der Arbeitsagentur für Arbeit.
 Technische Features:
 
 - Bundling Frontend und Server
--
+- Docker Development und Production
 
 @TODO
 
-- Bundling (progress)
-- Docker Development und Production
 - Scheduling Such-Aufträge
 - Benutzer (Daten nach Benutzer aufteilen)
 - Filter (include & exclude) nach Berufen / Berufsbezeichnungen
