@@ -1,0 +1,34 @@
+networks:
+  jobbinger:
+    external: false
+    name: ${PROJECT_NAME}
+  proxy_default:
+    external: true
+
+services:
+  jobbinger:
+    extends:
+      file: docker-compose-server.yml
+      service: ${PROJECT_NAME}
+
+    # replace this
+    #command: 'tail -f /dev/null'
+    command: 'npm start'
+
+    networks:
+      - ${PROJECT_NAME} # the app network
+      - proxy_default   # jwilders nginx reverse proxy network
+
+    volumes:
+      - .:/app
+      - ./data:/app/data
+
+    environment:
+      - DEBUG=true
+      - ENV=development
+      - SERVER_PORT=${SERVER_PORT}
+
+      # for the jwilder nginx reverse proxy with dockergen
+      - VIRTUAL_HOST=${PROJECT_NAME}.${NGINX_PROXY_HOST}
+      - VIRTUAL_PORT=${SERVER_PORT}
+      - HOST_IP=${NGINX_PROXY_IP}

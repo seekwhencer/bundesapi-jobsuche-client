@@ -71,7 +71,7 @@ Baut Bundles für Frontend (js, css) und den Server im Ordner : `build/`
 ## Docker
 
 - benötigt Docker und Docker-Compose
-- `.env.default` nach `.env` klonen vor Betrieb und Datei bearbeiten
+- `.env.default` nach `.env` klonen vor Betrieb diese Datei bearbeiten
 
 ### Development
 
@@ -82,7 +82,12 @@ docker-compose -f docker-compose-dev.yml up -d
 ### Production
 
 ```bash
-docker-compose up -d
+docker-compose -f docker-compose-prod.yml up -d
+```
+
+### Build Image
+```bash
+docker-compose build --no-cache
 ```
 
 ## Deployment

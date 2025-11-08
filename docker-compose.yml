@@ -1,0 +1,15 @@
+services:
+  jobbinger:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${PROJECT_NAME}
+    container_name: ${PROJECT_NAME}
+    working_dir: /app
+
+    # replace it
+    # command: 'tail -f /dev/null'
+
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
