@@ -66,7 +66,9 @@ export default class JobListing extends EventEmitter {
                 `<b>${esc(j.titel || j.beruf || "—")}</b>` +
                 `<div class="meta">${esc(j.arbeitgeber || "")} · ${esc(j.arbeitsort?.ort || "")}</div>` +
                 `<div class="date">${(new Date(j.modifikationsTimestamp)).toLocaleString("de-DE").split(', ')[0]}</div>` +
-                `<div class="search"><strong>${j.search.location}</strong>${j.search.radius ? ` (${j.search.radius}km)` : ''}${j.search.search ? ` - ${j.search.search}` : ''}${j.search.days ? `, ${j.search.days} Tage` : ''}</div>` +
+                `<div class="searches">` +
+                `${ Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - ${j.searches[s].search}` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("") }` +
+                `</div>` +
                 `<div class="actions"><button class="like">${j.liked ? '♥' : '♡'}</button><button class="ignore">☢</button></div>`;
             div.onclick = (e) => this.select(j.id, div, e);
             this.element.appendChild(div);
@@ -126,7 +128,10 @@ export default class JobListing extends EventEmitter {
         let filtered = this.jobs;
 
         if (this.filterQuery.search)
-            filtered = filtered.filter((j) => j.search.id === this.filterQuery.search.id);
+            filtered = filtered.filter((j) => {
+                const searchIds = Object.keys(j.searches);
+                return searchIds.includes(this.filterQuery.search.id);
+            });
 
         if (this.filterQuery.keyword)
             filtered = filtered.filter((j) => JSON.stringify(j).toLowerCase().includes(this.filterQuery.keyword));

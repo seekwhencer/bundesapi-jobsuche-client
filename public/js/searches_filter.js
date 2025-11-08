@@ -1,17 +1,58 @@
-export default class SearchesFilter {
+import EventEmitter from "./event_emitter.js";
+
+export default class SearchesFilter extends EventEmitter {
     constructor(page) {
+        super();
+
         this.page = page;
         this.listing = this.page.listing;
         this.openFilterBtn = document.querySelector('#open-searches-filter');
         this.openFilterBtn.addEventListener('click', () => this.show());
         this.element = document.querySelector('#searches-filter');
 
+        this.searches = new Proxy({}, {
+            get: (target, prop, receiver) => {
+                return target[prop];
+            },
+
+            set: (target, prop, value) => {
+                if (target[prop] === value)
+                    return true;
+
+                const existing = !!target[prop];
+                target[prop] = value;
+
+                if (!existing) {
+                    this.emit('create', prop, value);
+                    this.emit(prop, value, 'create');
+                } else {
+                    this.emit('update', prop, value);
+                    this.emit(prop, value, 'update');
+
+                }
+                return true;
+            },
+
+            deleteProperty: (target, prop, receiver) => {
+                delete target[prop];
+                this.emit('delete', prop);
+                this.emit(prop, 'delete');
+                return true;
+
+            }
+        });
+
+        this.on('create', (prop, value) => console.log('SEARCH CREATE', prop, value));
+        this.on('update', (prop, value) => console.log('SEARCH UPDATE', prop, value));
+        this.on('delete', (prop, value) => console.log('SEARCH DELETE', prop));
+
         this.listing.listingFilter.on('search', search => {
             const button = this.element.querySelector(`[data-id="${search.id}"]`);
 
-            if (!button)
+            if (!button) {
                 this.flushButtons({});
-
+                return;
+            }
             if (button.dataset.id === search.id) {
                 button.classList.add('selected');
             }
@@ -30,12 +71,14 @@ export default class SearchesFilter {
 
     async load() {
         const res = await fetch('/api/search');
-        this.searches = await res.json();
+        const searches = await res.json();
+        [...searches].forEach(search => this.searches[search.id] = search);
+
         this.render();
     }
 
     render() {
-        this.searches.forEach(search => this.renderButton(search));
+        Object.keys(this.searches).forEach(id => this.renderButton(this.searches[id]));
     }
 
     renderButton(search) {

@@ -168,16 +168,23 @@ header {
                 color: #555;
             }
 
-            .search {
+            .searches {
                 position: absolute;
                 right: 10px;
-                bottom: 10px;
-                font-size: 10px;
-                background-color: #eeeeee;
-                border-radius: 5px;
-                padding: 2px 10px;
-                color: #999;
+                bottom: 5px;
+
+                .search {
+                    display: inline-block;
+                    font-size: 10px;
+                    background-color: #eeeeee;
+                    border-radius: 5px;
+                    padding: 2px 10px;
+                    color: #999;
+                    margin-left: 5px;
+                    margin-bottom: 5px;
+                }
             }
+
 
             .actions {
                 position: absolute;
