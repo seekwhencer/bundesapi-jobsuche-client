@@ -1,7 +1,7 @@
-import JobDetails from '/js/job_detail.js';
-import JobListing from '/js/job_listing.js';
-import Searches from '/js/searches.js';
-import SearchesFilter from '/js/searches_filter.js';
+import JobDetails from './job_detail.js';
+import JobListing from './job_listing.js';
+import Searches from './searches.js';
+import SearchesFilter from './searches_filter.js';
 
 export default class Page {
     constructor() {
@@ -18,4 +18,4 @@ export default class Page {
 }
 
 const page = new Page();
-await page.init();
+page.init();
