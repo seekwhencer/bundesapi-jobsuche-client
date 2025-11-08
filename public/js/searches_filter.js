@@ -38,13 +38,12 @@ export default class SearchesFilter extends EventEmitter {
                 this.emit('delete', prop);
                 this.emit(prop, 'delete');
                 return true;
-
             }
         });
 
-        this.on('create', (prop, value) => console.log('SEARCH CREATE', prop, value));
-        this.on('update', (prop, value) => console.log('SEARCH UPDATE', prop, value));
-        this.on('delete', (prop, value) => console.log('SEARCH DELETE', prop));
+        //this.on('create', (prop, value) => console.log('SEARCH CREATE', prop, value));
+        //this.on('update', (prop, value) => console.log('SEARCH UPDATE', prop, value));
+        //this.on('delete', (prop, value) => console.log('SEARCH DELETE', prop));
 
         this.listing.listingFilter.on('search', search => {
             const button = this.element.querySelector(`[data-id="${search.id}"]`);
@@ -62,7 +61,6 @@ export default class SearchesFilter extends EventEmitter {
     async show() {
         if (this.element.classList.contains('open')) {
             this.element.classList.remove('open');
-            this.element.innerHTML = '';
         } else {
             await this.load();
             this.element.classList.add('open');
@@ -70,6 +68,7 @@ export default class SearchesFilter extends EventEmitter {
     }
 
     async load() {
+        this.flushSearches();
         const res = await fetch('/api/search');
         const searches = await res.json();
         [...searches].forEach(search => this.searches[search.id] = search);
@@ -78,6 +77,7 @@ export default class SearchesFilter extends EventEmitter {
     }
 
     render() {
+        this.element.innerHTML = '';
         Object.keys(this.searches).forEach(id => this.renderButton(this.searches[id]));
     }
 
@@ -85,13 +85,17 @@ export default class SearchesFilter extends EventEmitter {
         const button = document.createElement("button");
         button.className = "";
         button.dataset.id = search.id;
-        button.innerHTML = `${search.location}${search.radius ? ` (${search.radius}km)` : ''}${search.search ? ` - ${search.search}` : ''}${search.days ? `, ${search.days} Tage` : ''}`;
+        button.innerHTML = `${search.location}${search.radius ? ` (${search.radius}km)` : ''}${search.search ? ` - <strong>${search.search}</strong>` : ''}${search.days ? `, ${search.days} Tage` : ''}`;
         button.onclick = (e) => this.filterBySearch(search, e);
         this.element.appendChild(button);
     }
 
     flushButtons(button) {
         this.element.querySelectorAll('button').forEach(b => b !== button ? b.classList.remove('selected') : null);
+    }
+
+    flushSearches() {
+        Object.keys(this.searches).forEach(id => delete this.searches[id]);
     }
 
     filterBySearch(search, e) {

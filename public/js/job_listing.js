@@ -67,7 +67,7 @@ export default class JobListing extends EventEmitter {
                 `<div class="meta">${esc(j.arbeitgeber || "")} · ${esc(j.arbeitsort?.ort || "")}</div>` +
                 `<div class="date">${(new Date(j.modifikationsTimestamp)).toLocaleString("de-DE").split(', ')[0]}</div>` +
                 `<div class="searches">` +
-                `${ Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - ${j.searches[s].search}` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("") }` +
+                `${ Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("") }` +
                 `</div>` +
                 `<div class="actions"><button class="like">${j.liked ? '♥' : '♡'}</button><button class="ignore">☢</button></div>`;
             div.onclick = (e) => this.select(j.id, div, e);

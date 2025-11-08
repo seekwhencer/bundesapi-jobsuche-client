@@ -69,23 +69,29 @@ export default class Searches {
             body: JSON.stringify(body)
         });
 
-        if (res.ok) await this.load();
-        else alert("Fehler beim Speichern");
+        if (res.ok) {
+            await this.load();
+            await this.page.searchesFilter.load();
+        } else alert("Fehler beim Speichern");
     }
 
     async deleteSearch(id) {
         if (!confirm("Suche wirklich löschen?")) return;
         await this.deleteSearchResults(id);
         const res = await fetch(`/api/search/${id}`, {method: "DELETE"});
-        if (res.ok) await this.load();
-        else alert("Fehler beim Löschen");
+        if (res.ok) {
+            await this.load();
+            await this.page.searchesFilter.load();
+        } else alert("Fehler beim Löschen");
     }
 
     async deleteSearchResults(id) {
         if (!confirm("Suchergebnisse wirklich löschen?")) return;
         const res = await fetch(`/api/jobs/${id}`, {method: "DELETE"});
-        if (res.ok) await this.listing.load();
-        else alert("Fehler beim Löschen");
+        if (res.ok) {
+            await this.listing.load();
+            await this.page.searchesFilter.load();
+        } else alert("Fehler beim Löschen");
     }
 
     async runSearch(id, e) {
