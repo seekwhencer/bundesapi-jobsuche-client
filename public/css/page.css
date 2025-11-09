@@ -7,9 +7,10 @@
 
 body {
     font-family: var(--font-family);
-    color: #111;
     margin: 0;
     padding: 0;
+    background-color: var(--page-bg);
+    color: var(--text-color);
 }
 
 pre {
@@ -31,16 +32,17 @@ ul {
 
 header {
     position: fixed;
-    background-color: white;
+    background-color: var(--page-bg);
     width: 100%;
     border-bottom: 1px solid #bbb;
     z-index: 1000;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     height: 100px;
+    color: var(--text-color);
 
     h1 {
-        color: black;
+        color: var(--text-color);
         padding: 0 20px;
         margin: 10px 0 0 0;
         text-transform: uppercase;
@@ -53,16 +55,72 @@ header {
         width: 30vw;
 
         input {
+            color: var(--text-color);
             padding: 8px;
-            border: 1px solid #bbb;
+            border: 1px solid var(--light-border-color);
             border-radius: 6px;
             display: block;
             width: 100%;
             text-align: center;
+            background-color: var(--light-med-bg);
+        }
+    }
+
+    .toggle-day-night {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+        background-color: var(--light-border-color);
+        padding: 2px 15px 2px 40px;
+        display: inline-block;
+        height: 20px;
+        overflow: hidden;
+        font-size: 12px;
+        line-height: 20px;
+        border-radius: 10px;
+
+
+        input {
+            appearance: none;
+            cursor: pointer;
+
+            &:before {
+                visibility: visible;
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                border-radius: 10px;
+                content: "";
+                display: block;
+                width: 40px;
+                height: 20px;
+                overflow: hidden;
+                background-color: var(--color-primary);
+            }
+
+            &:after {
+                visibility: visible;
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                border-radius: 10px;
+                content: "";
+                display: block;
+                width: 16px;
+                height: 16px;
+                overflow: hidden;
+                background-color: var(--page-bg);
+                transition: left 0.1s ease-in-out;
+            }
+
+            &:checked:after {
+                left: 21px;
+                transition: left 0.1s ease-in-out;
+            }
         }
     }
 }
-
 
 
 .page {
@@ -104,7 +162,7 @@ header {
 .searches-actions {
     padding: 20px 0;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--light-border-color);;
 }
 
 #open-modal {
@@ -118,8 +176,6 @@ header {
     padding: 10px 10px;
     background-color: #999;
 }
-
-
 
 
 .search-dataset {

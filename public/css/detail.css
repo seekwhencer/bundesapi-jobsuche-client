@@ -7,7 +7,7 @@
     overflow-y: auto;
 
     a {
-        background-color: var(--color-primary);
+        background-color: #7758b4;
         color: white;
         padding: 3px 20px 3px 10px;
         border-radius: 3px;
@@ -27,7 +27,7 @@
     }
 
     .email {
-        background-color: var(--color-secondary);
+        background-color: #483077;
         color: white;
         border-radius: 3px;
         padding: 3px 20px 3px 10px;
@@ -52,7 +52,7 @@
             margin: 0;
             list-style: none;
             padding: 2px 10px;
-            background-color: #ddd;
+            background-color: var(--light-bg);
             border-radius: 4px;
             font-size: 12px;
             margin-right: 5px;
@@ -73,10 +73,12 @@
 
     .date {
         position: absolute;
-        right: 0;
+        right: 20px;
         top: 0;
         background-color: #ddd;
         width: 50px;
+        border-radius: 5px;
+        overflow: hidden;
 
         * {
 
@@ -102,9 +104,13 @@
 
         .year {
             padding: 5px 0;
+            color: #333;
         }
     }
 
+    hr {
+        border: 1px solid var(--light-border-color);
+    }
 
     .description {
         border-top: 1px solid #ddd;

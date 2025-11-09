@@ -38,21 +38,16 @@ export default class JobNameFilter extends Event {
         this.element.innerHTML = '';
 
         const button = document.createElement("button");
-        button.onclick = e => this.filterByJobTitle('', e);
+        button.onclick = e => this.listing.filterQuery.jobTitle = '';
         button.innerHTML = `Alle`;
         this.element.append(button);
 
         count.forEach(j => {
             const button = document.createElement("button");
             button.className = this.listing.filterQuery.jobTitle === j[0] ? `active` : ``;
-            button.onclick = e => this.filterByJobTitle(j[0], e);
+            button.onclick = e => this.listing.filterQuery.jobTitle = j[0];
             button.innerHTML = `${j[0]} (${j[1]})`;
             this.element.append(button);
         });
-    }
-
-    filterByJobTitle(title, e) {
-        this.listing.filterQuery.jobTitle = title;
-        //this.element.querySelectorAll('button').forEach(button => button.innerHTML !== e.target.innerHTML ? button.classList.remove('active') : button.classList.add('active'));
     }
 }

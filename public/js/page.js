@@ -12,10 +12,19 @@ export default class Page {
         this.searches = new Searches(this);
         this.searchesFilter = new SearchesFilter(this);
         this.jobNameFilter = new JobNameFilter(this);
+
+        this.toggleDayNighButton = document.querySelector('#toggle-day-night');
+        this.toggleDayNighButton.onclick = () => this.toggleDayNight();
     }
 
     async init() {
         await page.listing.load();
+    }
+
+    toggleDayNight() {
+        const root = document.documentElement;
+        const current = root.getAttribute('data-theme');
+        root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     }
 }
 

@@ -7,17 +7,19 @@
 .searches-filter {
     padding: 20px 0;
     z-index: 999;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid var(--light-border-color);
+    border-bottom: 1px solid var(--light-border-color);
     text-align: center;
     width: 20vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-height: calc(50vh - 200px);
+    overflow-y: scroll;
 
     button {
         padding: 3px 10px;
-        margin: 0 0 10px 0;
+        margin: 0 0 5px 0;
         display: block;
 
         &:last-child {
