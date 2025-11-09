@@ -35,10 +35,10 @@ export default class Searches {
         const div = document.createElement("div");
         div.className = "search-dataset";
         div.innerHTML = `
-        <input type="text" placeholder="Location" value="${search.location || ""}">
-        <input type="text" placeholder="Search" value="${search.search || ""}">
-        <input type="number" placeholder="Radius" value="${search.radius || ""}">
-        <input type="number" placeholder="Days" value="${search.days || ""}">
+        <input type="text" placeholder="Ort oder Postleitzahl" value="${search.location || ""}">
+        <input type="text" placeholder="Suchbegriff" value="${search.search || ""}">
+        <input type="number" placeholder="Radius" max="200" min="0" value="${search.radius || ""}">
+        <input type="number" placeholder="Tage" max="30" min="0" value="${search.days || ""}">
         <div class="search-actions">
           <button class="update">Speichern</button>
           <button class="trigger" ${!search ? 'disabled' : ''}>Start</button>
