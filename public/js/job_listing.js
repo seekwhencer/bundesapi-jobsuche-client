@@ -147,6 +147,10 @@ export default class JobListing extends EventEmitter {
         if (this.filterQuery.ignored === false)
             filtered = filtered.filter((j) => j.ignored !== true);
 
+        if (this.filterQuery.jobTitle)
+            filtered = filtered.filter((j) => j.jobTitles.includes(this.filterQuery.jobTitle));
+
+
         this.emit('filtered', filtered);
     }
 

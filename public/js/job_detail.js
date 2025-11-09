@@ -25,9 +25,6 @@ export default class JobDetail {
         const month = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
         const job = await res.json();
         const linksAndEmails = extractLinksAndEmails(job.description) || false;
-
-        console.log(linksAndEmails);
-
         this.element.style.display = "block";
         this.element.innerHTML =
             `<div class="date"><span class="day">${(new Date(job.modifikationsTimestamp)).getDate()}</span><span class="month">${month[new Date(job.modifikationsTimestamp).getMonth()]}</span><span class="year">${new Date(job.modifikationsTimestamp).getFullYear()}</span></div>` +

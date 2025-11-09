@@ -3,6 +3,7 @@
 @import 'listing_filter.css';
 @import 'listing_card.css';
 @import 'detail.css';
+@import 'jobnames_filter.css';
 
 body {
     font-family: var(--font-family);
