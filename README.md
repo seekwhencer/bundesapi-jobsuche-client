@@ -74,7 +74,11 @@ Baut Bundles für Frontend (js, css) und den Server im Ordner : `build/`
 ### Development
 
 ```bash
+# exposed port
 docker-compose -f docker-compose-dev.yml up -d
+
+# keine Ports exposed, mit jwilders nginx reverse proxy
+docker-compose -f docker-compose-dev-proxy.yml up -d
 ```
 
 ### Production

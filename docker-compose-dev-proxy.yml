@@ -2,6 +2,8 @@ networks:
   jobbinger:
     external: false
     name: ${PROJECT_NAME}
+  proxy_default:
+    external: true
 
 services:
   jobbinger:
@@ -15,9 +17,7 @@ services:
 
     networks:
       - ${PROJECT_NAME} # the app network
-
-    expose:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - proxy_default   # jwilders nginx reverse proxy network
 
     volumes:
       - .:/app
