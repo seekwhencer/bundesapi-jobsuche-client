@@ -6,8 +6,6 @@ export default class SearchesFilter extends EventEmitter {
 
         this.page = page;
         this.listing = this.page.listing;
-        this.openFilterBtn = document.querySelector('#open-searches-filter');
-        this.openFilterBtn.addEventListener('click', () => this.show());
         this.element = document.querySelector('#searches-filter');
 
         this.searches = new Proxy({}, {
@@ -56,6 +54,8 @@ export default class SearchesFilter extends EventEmitter {
                 button.classList.add('selected');
             }
         });
+
+        this.load();
     }
 
     async show() {

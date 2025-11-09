@@ -1,0 +1,31 @@
+.searches-filter-column {
+    width: 20vw;
+    overflow: hidden;
+    position: fixed;
+}
+
+.searches-filter {
+    padding: 20px 0;
+    z-index: 999;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+        padding: 3px 10px;
+        margin: 0 0 10px 0;
+        display: block;
+
+        &:last-child {
+            margin: 0;
+        }
+
+        &.selected {
+            background-color: var(--color-secondary);
+        }
+    }
+}

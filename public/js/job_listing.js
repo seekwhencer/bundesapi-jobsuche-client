@@ -11,7 +11,6 @@ export default class JobListing extends EventEmitter {
 
         this.element = document.querySelector("#list");
         this.filterElement = document.querySelector("#filter");
-        this.loadListBtn = document.querySelector("#load-list");
         this.loadLikedBtn = document.querySelector("#load-liked");
         this.loadIgnoredBtn = document.querySelector("#load-ignored");
 
@@ -20,18 +19,18 @@ export default class JobListing extends EventEmitter {
          */
 
         this.filterElement.addEventListener("input", () => this.filterQuery.keyword = this.filterElement.value.toLowerCase());
-        this.loadListBtn.onclick = () => this.load();
         this.loadLikedBtn.onclick = () => this.filterByProperty('liked');
         this.loadIgnoredBtn.onclick = () => this.filterByProperty('ignored');
 
         this.listingFilter = new ListingFilter(this);
+        this.filterQuery = this.listingFilter.query;
 
         this.listingFilter.on('liked', liked => liked === true ? this.loadLikedBtn.className = 'included' : liked === false ? this.loadLikedBtn.className = 'excluded' : this.loadLikedBtn.className = '');
         this.listingFilter.on('ignored', ignored => ignored === true ? this.loadIgnoredBtn.className = 'included' : ignored === false ? this.loadIgnoredBtn.className = 'excluded' : this.loadIgnoredBtn.className = '');
         this.listingFilter.on('keyword', keyword => null);
-        this.listingFilter.on('update', () => this.filter());
 
-        this.filterQuery = this.listingFilter.query;
+        this.listingFilter.on('update', () => this.filter());
+        this.on('filtered', filtered => this.render(filtered));
 
         this.filterQuery.liked = undefined;
         this.filterQuery.ignored = false;
@@ -67,7 +66,7 @@ export default class JobListing extends EventEmitter {
                 `<div class="meta">${esc(j.arbeitgeber || "")} · ${esc(j.arbeitsort?.ort || "")}</div>` +
                 `<div class="date">${(new Date(j.modifikationsTimestamp)).toLocaleString("de-DE").split(', ')[0]}</div>` +
                 `<div class="searches">` +
-                `${ Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("") }` +
+                `${Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("")}` +
                 `</div>` +
                 `<div class="actions"><button class="like">${j.liked ? '♥' : '♡'}</button><button class="ignore">☢</button></div>`;
             div.onclick = (e) => this.select(j.id, div, e);
@@ -148,7 +147,7 @@ export default class JobListing extends EventEmitter {
         if (this.filterQuery.ignored === false)
             filtered = filtered.filter((j) => j.ignored !== true);
 
-        this.render(filtered);
+        this.emit('filtered', filtered);
     }
 
     filterByProperty(prop) {

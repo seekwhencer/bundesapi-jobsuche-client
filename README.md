@@ -35,6 +35,7 @@ Technische Features:
 
 - braucht Node.js für bare metal
 - wenn Windows, dann WSL (Linux, Ubuntu)
+- am besten auf einem Ubuntu Docker Host
 
 ```bash
 git clone https://github.com/seekwhencer/bundesapi-jobsuche-client.git
@@ -56,7 +57,7 @@ npm start
 
 ## Entwicklung
 
-Frontend und Server geschrieben in Vanilla Javascript ES6+ und purem CSS. Komplett ohne `webpack`, `vite` und Co.
+Frontend und Server geschrieben in Vanilla Javascript ES6+ und purem CSS. Bundler: `esbuild`
 
 ### Build
 
@@ -82,7 +83,8 @@ docker-compose -f docker-compose-dev-proxy.yml up -d
 ```
 
 ### Production
-
+Also wenn man überhaupt von *"production"* reden kann...  
+Das yaml benötigt noch den nginx reverse proxy von jwilder.
 ```bash
 docker-compose -f docker-compose-prod.yml up -d
 ```

@@ -1,4 +1,8 @@
 @import 'variables.css';
+@import 'searches_filter.css';
+@import 'listing_filter.css';
+@import 'listing_card.css';
+@import 'detail.css';
 
 body {
     font-family: var(--font-family);
@@ -58,230 +62,15 @@ header {
     }
 }
 
-.searches-filter {
-    background-color: #eee;
-    padding: 10px 0 5px 0;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
-    z-index: 999;
-    position: fixed;
-    width: 100%;
-    top: 100px;
-    left: 0;
-    border-bottom: 3px solid var(--color-primary);
-    transform: translateY(-50px);
-    transition: all 0.1s ease-in-out;
-    text-align: center;
 
-    &.open {
-        transform: translateY(0);
-        transition: all 0.1s ease-in-out;
-    }
-
-    button {
-        padding: 3px 10px;
-        margin-right: 5px;
-        margin-bottom: 5px;
-
-        &.selected {
-            background-color: var(--color-secondary);
-        }
-    }
-}
 
 .page {
     padding-top: 120px;
     display: flex;
 
     .list {
-        width: 50vw;
-
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin: 8px 5px;
-            cursor: pointer;
-            transition: all 0.15s;
-            padding: 10px 120px 10px 10px;
-            position: relative;
-
-            &:hover {
-                background: #f9f9f9;
-
-                .search {
-                    background-color: #666;
-                    border-color: var(--color-primary);
-                    color: white;
-                }
-
-                .actions {
-                    button {
-                        transition: all 0.1s ease-in-out;
-                        opacity: 1;
-                    }
-                }
-
-
-            }
-
-            &.selected {
-                background-color: var(--color-primary);
-                color: white;
-
-                .meta, .date {
-                    color: white;
-                }
-            }
-
-            &.liked {
-                border-color: var(--color-primary);
-
-                button.like {
-                    transition: all 0.1s ease-in-out;
-                    transform: scale(1.5);
-                    transform-origin: top right;
-                    color: var(--color-primary);
-                    background-color: #ddd;
-                    border-top: none;
-                    opacity: 1;
-                }
-            }
-
-            &.ignored {
-                button.ignore {
-                    transition: all 0.1s ease-in-out;
-                    transform: scale(1.5);
-                    transform-origin: top right;
-                    background-color: #e2f107;
-                    color: #333;
-                    border-top: none;
-                    opacity: 1;
-                }
-            }
-
-            .date {
-                font-size: 12px;
-                color: #555;
-            }
-
-            .meta {
-                font-size: 12px;
-                color: #555;
-            }
-
-            .searches {
-                position: absolute;
-                right: 10px;
-                bottom: 5px;
-
-                .search {
-                    display: inline-block;
-                    font-size: 10px;
-                    background-color: #eeeeee;
-                    border-radius: 5px;
-                    padding: 2px 10px;
-                    color: #999;
-                    margin-left: 5px;
-                    margin-bottom: 5px;
-                }
-            }
-
-
-            .actions {
-                position: absolute;
-                top: 0;
-                right: 10px;
-
-                button {
-                    margin-left: 20px;
-                    font-size: 20px;
-                    line-height: 20px;
-                    text-align: center;
-                    width: 24px;
-                    height: 24px;
-                    padding: 0;
-                    border-top-left-radius: 0;
-                    border-top-right-radius: 0;
-                    opacity: 0.2;
-                }
-            }
-        }
-    }
-
-    .detail {
-        position: fixed;
-        right: 10px;
-        top: 120px;
-        width: calc(50vw - 40px);
-        height: calc(100vh - 100px);
-        overflow-y: auto;
-
-        .job-titles {
-            margin: 0;
-            padding: 0;
-
-            .job-title {
-                display: inline-block;
-                margin: 0;
-                list-style: none;
-                padding: 2px 10px;
-                background-color: #ddd;
-                border-radius: 4px;
-                font-size: 12px;
-                margin-right: 5px;
-            }
-        }
-
-        .date {
-            position: absolute;
-            right: 0;
-            top: 0;
-            background-color: #ddd;
-            width: 50px;
-
-            * {
-
-                text-align: center;
-                display: block;
-            }
-
-            .day {
-                font-size: 20px;
-                background: black;
-                color: white;
-                font-weight: 900;
-            }
-
-            .month {
-                text-transform: uppercase;
-                background-color: black;
-                color: white;
-                font-size: 16px;
-                font-weight: 900;
-                padding-bottom: 5px;
-            }
-
-            .year {
-                padding: 5px 0;
-            }
-        }
-
-
-        .description {
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        h2 {
-            padding: 0;
-            margin: 0;
-            font-size: 20px;
-        }
-
-        pre {
-            padding: 10px;
-        }
+        width: 30vw;
+        transform: translateX(20vw);
     }
 }
 
@@ -312,10 +101,9 @@ header {
 }
 
 .searches-actions {
-    position: absolute;
-    right: 10px;
-    z-index: 1000;
-    top: 10px;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 }
 
 #open-modal {
@@ -330,44 +118,7 @@ header {
     background-color: #999;
 }
 
-.listing-filter {
-    position: absolute;
-    top: 10px;
-    left: 10px;
 
-    button {
-        display: inline-block;
-        position: relative;
-
-        &:nth-child(2), &:nth-child(3) {
-            font-size: 20px;
-            line-height: 34px;
-            padding: 0 10px;
-            transform: translateY(3px);
-        }
-
-        &.included {
-            background-color: var(--color-secondary);
-        }
-
-        &.excluded {
-
-            &:after {
-                transform-origin: center;
-                position: absolute;
-                content: "";
-                width: 47px;
-                height: 2px;
-                top: 16px;
-                left: -5px;
-                overflow: hidden;
-                background-color: white;
-                transform: rotate(45deg);
-
-            }
-        }
-    }
-}
 
 
 .search-dataset {
@@ -395,7 +146,6 @@ header {
 
     .search-actions {
         display: inline-block;
-        position: absolute;
         right: 10px;
 
         button {
