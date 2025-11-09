@@ -34,10 +34,10 @@ header {
     position: fixed;
     background-color: var(--page-bg);
     width: 100%;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid var(--light-bg);
     z-index: 1000;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     height: 100px;
     color: var(--text-color);
 
