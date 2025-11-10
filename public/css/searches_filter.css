@@ -16,6 +16,7 @@
     align-items: center;
     max-height: calc(50vh - 200px);
     overflow-y: scroll;
+    font-size: 12px;
 
     button {
         padding: 3px 10px;

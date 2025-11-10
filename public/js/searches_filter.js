@@ -77,6 +77,13 @@ export default class SearchesFilter extends EventEmitter {
     }
 
     render() {
+        console.log('>>>', Object.keys(this.searches).length);
+
+        if(Object.keys(this.searches).length === 0) {
+            this.element.innerHTML = 'Noch keine Suche angelegt.';
+            return;
+        }
+
         this.element.innerHTML = '';
         Object.keys(this.searches).forEach(id => this.renderButton(this.searches[id]));
     }

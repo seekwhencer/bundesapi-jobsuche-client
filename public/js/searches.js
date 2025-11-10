@@ -54,7 +54,17 @@ export default class Searches {
     }
 
     async updateSearch(id, div) {
-        const [location, search, radius, days] = div.querySelectorAll("input");
+        let [location, search, radius, days] = div.querySelectorAll("input");
+
+        if (location.value.trim() === '')
+            return;
+
+        if (radius.value.trim() === '')
+            radius.value = 10;
+
+        if (days.value.trim() === '')
+            days.value = 7;
+
         const body = {
             location: location.value.trim(),
             radius: parseInt(radius.value),

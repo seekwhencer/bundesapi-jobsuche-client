@@ -7,9 +7,10 @@
     overflow-y: scroll;
     padding: 20px 0 20px 0;
     border-bottom: 1px solid var(--light-border-color);
+    font-size: 12px;
 
     button {
-        margin: 0 0 5px 0 ;
+        margin: 0 0 5px 0;
         padding: 3px 10px;
         border: 1px solid var(--light-bg);
         background-color: var(--light-bg);

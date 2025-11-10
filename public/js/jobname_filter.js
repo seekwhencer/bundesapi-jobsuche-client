@@ -35,8 +35,12 @@ export default class JobNameFilter extends Event {
                 return keyA.localeCompare(keyB);
             });
 
-        this.element.innerHTML = '';
+        if(count.length === 0) {
+            this.element.innerHTML = 'Keine Berufsbezeichnungen gefunden.';
+            return;
+        }
 
+        this.element.innerHTML = '';
         const button = document.createElement("button");
         button.onclick = e => this.listing.filterQuery.jobTitle = '';
         button.innerHTML = `Alle`;
