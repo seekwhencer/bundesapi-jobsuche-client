@@ -73,13 +73,15 @@ export default class SearchesFilter extends EventEmitter {
         const searches = await res.json();
         [...searches].forEach(search => this.searches[search.id] = search);
 
+        if (searches.length === 0) {
+            this.page.searches.open();
+            return;
+        }
         this.render();
     }
 
     render() {
-        console.log('>>>', Object.keys(this.searches).length);
-
-        if(Object.keys(this.searches).length === 0) {
+        if (Object.keys(this.searches).length === 0) {
             this.element.innerHTML = 'Noch keine Suche angelegt.';
             return;
         }

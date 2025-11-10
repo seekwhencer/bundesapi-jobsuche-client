@@ -8,14 +8,8 @@ export default class Searches {
         this.addBtn = document.querySelector("#add-search");
         this.listingElement = document.querySelector("#searches-listing");
 
-        this.openBtn.onclick = async () => {
-            await this.load();
-            this.modal.style.display = "flex";
-        };
-        this.closeBtn.onclick = () => {
-            this.modal.style.display = "none";
-            this.listingElement.innerHTML = "";
-        };
+        this.openBtn.onclick = async () => this.open();
+        this.closeBtn.onclick = () => this.close();
         this.addBtn.onclick = () => this.renderEditRow(false);
     }
 
@@ -28,6 +22,10 @@ export default class Searches {
 
     render() {
         this.listingElement.innerHTML = "";
+        if (this.searches.length === 0) {
+            this.renderEditRow({});
+            return;
+        }
         this.searches.forEach(search => this.renderEditRow(search));
     }
 
@@ -51,6 +49,16 @@ export default class Searches {
         div.querySelector(".delete").onclick = () => this.deleteSearch(search.id);
         div.querySelector(".delete-results").onclick = () => this.deleteSearchResults(search.id);
         this.listingElement.appendChild(div);
+    }
+
+    async open() {
+        await this.load();
+        this.modal.style.display = "flex";
+    }
+
+    close() {
+        this.modal.style.display = "none";
+        //this.listingElement.innerHTML = "";
     }
 
     async updateSearch(id, div) {
