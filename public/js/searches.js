@@ -23,7 +23,7 @@ export default class Searches {
     render() {
         this.listingElement.innerHTML = "";
         if (this.searches.length === 0) {
-            this.renderEditRow({});
+            this.renderEditRow(false);
             return;
         }
         this.searches.forEach(search => this.renderEditRow(search));
