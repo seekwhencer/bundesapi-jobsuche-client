@@ -3,6 +3,7 @@ import JobListing from './job_listing.js';
 import Searches from './searches.js';
 import SearchesFilter from './searches_filter.js';
 import JobNameFilter from './jobname_filter.js';
+import WebsocketClient from "./websocket.js";
 
 export default class Page {
     constructor() {
@@ -12,6 +13,7 @@ export default class Page {
         this.searches = new Searches(this);
         this.searchesFilter = new SearchesFilter(this);
         this.jobNameFilter = new JobNameFilter(this);
+        this.ws = new WebsocketClient(this);
 
         this.toggleDayNighButton = document.querySelector('#toggle-day-night');
         this.toggleDayNighButton.onclick = () => this.toggleDayNight();

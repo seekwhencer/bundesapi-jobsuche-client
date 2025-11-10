@@ -152,12 +152,73 @@ header {
 #modal-content {
     background: var(--page-bg);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 900px;
     max-height: 80vh;
-    overflow-y: auto;
     z-index: 2000;
     position: relative;
+
+    h2 {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(100% - 40px);
+        background-color: var(--page-bg);
+        margin: 0;
+        line-height: 50px;
+        padding: 0 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .searches-listing {
+        overflow-y: scroll;
+        max-height: 50vh;
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .searches-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: var(--page-bg);
+        width: 100%;
+        height: 70px;
+        border-top: 1px solid var(--light-border-color);
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+
+        .buttons-left {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    }
+
+    .server-logs {
+        position: absolute;
+        bottom: -100px;
+        height: 100px;
+        background-color: rgba(0,0,0,0.5);
+        width: calc(100% - 20px);
+        left: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        overflow-y: scroll;
+        font-size: 11px;
+        font-family: 'Courier New', monospace;
+        color: #ddd;
+        z-index: 1999;
+
+        .logs-stream {
+            overflow-y: scroll;
+            max-height: 80px;
+            margin: 10px;
+            font-weight: 700;
+        }
+    }
 }
 
 .searches-actions {
@@ -181,10 +242,8 @@ header {
 
 
 .search-dataset {
-    border: 1px solid var(--light-border-color);
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    border-bottom: 1px solid var(--light-border-color);
+    padding: 10px 0;
     position: relative;
 
     input {
@@ -195,6 +254,7 @@ header {
         color: var(--text-color);
         border: 1px solid var(--light-border-color);
         background-color: var(--light-med-bg);
+        border-radius: 3px;
 
         &:nth-child(1), &:nth-child(2) {
             width: 15%;
@@ -208,7 +268,8 @@ header {
 
     .search-actions {
         display: inline-block;
-        right: 10px;
+        right: 0;
+        position: absolute;
 
         button {
             background: var(--color-primary);

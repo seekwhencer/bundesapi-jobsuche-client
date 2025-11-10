@@ -9,11 +9,18 @@
 <body>
 <div id="modal">
     <div id="modal-content">
-        <h2>Suchen</h2>
-        <div id="searches-listing"></div>
-        <button id="add-search">Neue Suche</button>
-        <button id="run-search">Alle Suchen starten</button>
-        <button id="close-modal">✖ schliessen</button>
+        <h2>Suchen verwalten</h2>
+        <div id="searches-listing" class="searches-listing"></div>
+        <div class="searches-footer">
+            <div class="buttons-left">
+                <button id="add-search">Neue Suche</button>
+                <button id="run-search">Alle Suchen starten</button>
+            </div>
+            <button id="close-modal">✖ schliessen</button>
+        </div>
+        <div class="server-logs">
+            <div class="logs-stream"  id="server-logs-stream"></div>
+        </div>
     </div>
 </div>
 <header>

@@ -7,6 +7,7 @@ export default class Searches {
         this.closeBtn = document.querySelector("#close-modal");
         this.addBtn = document.querySelector("#add-search");
         this.listingElement = document.querySelector("#searches-listing");
+        this.serverLogsElement = document.querySelector("#server-logs-stream");
 
         this.openBtn.onclick = async () => this.open();
         this.closeBtn.onclick = () => this.close();
