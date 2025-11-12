@@ -159,6 +159,9 @@ button {
 }
 
 select {
+    appearance: none;
+    -webkit-appearance: none; /* Remove style Chrome */
+    -moz-appearance: none; /* Remove style FireFox */
     color: var(--text-color);
     border: 1px solid var(--light-border-color);
     background-color: var(--light-med-bg);
@@ -167,7 +170,24 @@ select {
     text-align: center;
 }
 
+select {
+    option {
+        appearance: none;
+        -webkit-appearance: none; /* Remove style Chrome */
+        -moz-appearance: none; /* Remove style FireFox */
+        margin: 0;
+        padding: 0;
+        border-bottom: var(--light-border-color);
+        border-radius: initial;
+        background-color: var(--light-med-bg);
+        cursor: pointer;
 
+        &:hover {
+            background-color: var(--color-primary);
+        }
+    }
+
+}
 
 
 

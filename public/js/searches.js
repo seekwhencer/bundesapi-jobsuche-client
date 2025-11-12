@@ -73,7 +73,6 @@ export default class Searches {
 
     close() {
         this.modal.style.display = "none";
-        //this.listingElement.innerHTML = "";
     }
 
     async updateSearch(id, div) {
