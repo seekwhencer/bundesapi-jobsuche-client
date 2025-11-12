@@ -35,16 +35,17 @@ export default class JobNameFilter extends Event {
                 return keyA.localeCompare(keyB);
             });
 
-        if(count.length === 0) {
-            this.element.innerHTML = 'Keine Berufsbezeichnungen gefunden.';
-            return;
-        }
-
         this.element.innerHTML = '';
+
+        const labelRow = document.createElement("div");
+        labelRow.className = "label-row";
+        this.listing.filterQuery.jobTitle !== undefined && this.listing.filterQuery.jobTitle !== '' ? labelRow.innerHTML = `<strong>${this.listing.filterQuery.jobTitle}</strong>` : null;
+
         const button = document.createElement("button");
         button.onclick = e => this.listing.filterQuery.jobTitle = '';
         button.innerHTML = `Alle`;
-        this.element.append(button);
+        labelRow.append(button);
+        this.element.append(labelRow);
 
         count.forEach(j => {
             const button = document.createElement("button");
@@ -53,5 +54,11 @@ export default class JobNameFilter extends Event {
             button.innerHTML = `${j[0]} (${j[1]})`;
             this.element.append(button);
         });
+
+        if (count.length === 0) {
+            const msg = document.createElement("div");
+            msg.innerHTML = 'Keine Berufsbezeichnungen gefunden.';
+            this.element.append(msg);
+        }
     }
 }
