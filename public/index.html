@@ -19,7 +19,7 @@
             <button id="close-modal">✖ schliessen</button>
         </div>
         <div class="server-logs">
-            <div class="logs-stream"  id="server-logs-stream"></div>
+            <div class="logs-stream" id="server-logs-stream"></div>
         </div>
     </div>
 </div>
@@ -43,10 +43,19 @@
         <div class="searches-actions">
             <button id="open-modal">Suchen verwalten</button>
         </div>
+        <div id="age-filter" class="age-filter">
+            <div id="age-slider"
+                 class="slider-wrap"
+                 data-min="0"
+                 data-max="30"
+                 data-step="1"
+                 data-start="0"
+                 data-end="3"></div>
+        </div>
         <div id="jobnames-filter" class="jobnames-filter"></div>
     </div>
     <div id="list" class="list"></div>
-    <div id="detail" class="detail" style="display:none"></div>
+    <div id="detail" class="detail"></div>
 </div>
 <script type="module" src="/js/page.js"></script>
 </body>

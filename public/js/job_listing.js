@@ -28,8 +28,22 @@ export default class JobListing extends EventEmitter {
         this.listingFilter.on('liked', liked => liked === true ? this.loadLikedBtn.className = 'included' : liked === false ? this.loadLikedBtn.className = 'excluded' : this.loadLikedBtn.className = '');
         this.listingFilter.on('ignored', ignored => ignored === true ? this.loadIgnoredBtn.className = 'included' : ignored === false ? this.loadIgnoredBtn.className = 'excluded' : this.loadIgnoredBtn.className = '');
         this.listingFilter.on('keyword', keyword => null);
-
         this.listingFilter.on('update', () => this.filter());
+
+        this.on('load', () => {
+            this.jobs.sort((a, b) => new Date(b.modifikationsTimestamp) - new Date(a.modifikationsTimestamp));
+
+            // enrich by age in days
+            this.jobs = this.jobs.map(job => {
+                return {...job, ...{age: Math.floor((new Date() - new Date(job.modifikationsTimestamp)) / (1000 * 60 * 60 * 24))}};
+            });
+
+            this.page.ageFilter.show();
+
+            this.filter();
+            this.filterElement.value = "";
+        });
+
         this.on('filtered', filtered => this.render(filtered));
 
         this.filterQuery.liked = undefined;
@@ -42,9 +56,7 @@ export default class JobListing extends EventEmitter {
         try {
             const res = await fetch("/api/list");
             this.jobs = await res.json();
-            this.jobs.sort((a, b) => new Date(b.modifikationsTimestamp) - new Date(a.modifikationsTimestamp));
-            this.filter();
-            this.filterElement.value = "";
+            this.emit('load');
         } catch (err) {
             this.element.innerHTML = "<p>Fehler beim Laden der Daten.</p>";
             console.error(err);
@@ -61,12 +73,20 @@ export default class JobListing extends EventEmitter {
             j.liked === true ? div.classList.add("liked") : null;
             j.ignored === true ? div.classList.add("ignored") : null;
 
+            const sinceLabels = {
+                0: "Heute",
+                1: "Gestern",
+                7: "Vor 1 Woche",
+                14: "Vor 2 Wochen",
+                28: "Vor 3 Wochen"
+            }
+
             div.innerHTML =
                 `<b>${esc(j.titel || j.beruf || "—")}</b>` +
                 `<div class="meta">${esc(j.arbeitgeber || "")} · ${esc(j.arbeitsort?.ort || "")}</div>` +
                 `<div class="date">${(new Date(j.modifikationsTimestamp)).toLocaleString("de-DE").split(', ')[0]}</div>` +
                 `<div class="searches">` +
-                `${Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days ? `, ${j.searches[s].days} Tage` : ''}</div>`).join("")}` +
+                `${Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days !== undefined ? `, ${sinceLabels[j.searches[s].days]}` : ''}</div>`).join("")}` +
                 `</div>` +
                 `<div class="actions"><button class="like">${j.liked ? '♥' : '♡'}</button><button class="ignore">☢</button></div>`;
             div.onclick = (e) => this.select(j.id, div, e);
@@ -150,6 +170,12 @@ export default class JobListing extends EventEmitter {
         if (this.filterQuery.jobTitle)
             filtered = filtered.filter((j) => j.jobTitles.includes(this.filterQuery.jobTitle));
 
+        if (this.filterQuery.age_from !== undefined)
+            filtered = filtered.filter((j) => j.age >= this.filterQuery.age_from);
+
+        if (this.filterQuery.age_to !== undefined)
+            filtered = filtered.filter((j) => j.age <= this.filterQuery.age_to);
+
 
         this.emit('filtered', filtered);
     }
@@ -161,6 +187,24 @@ export default class JobListing extends EventEmitter {
             this.filterQuery[prop] === true ? false :
                 this.filterQuery[prop] === false ? undefined :
                     true;
+    }
+
+    get latestJobAge() {
+        if (this.jobs.length === 0) return null;
+
+        const latestJob = this.jobs.reduce((latest, job) => {
+            const jobDate = new Date(job.modifikationsTimestamp);
+            const compDate = new Date(latest.modifikationsTimestamp);
+            return jobDate < compDate ? job : latest;
+        }, this.jobs[0]);
+
+        const now = new Date();
+        const jobDate = new Date(latestJob.modifikationsTimestamp);
+        return Math.floor((now - jobDate) / (1000 * 60 * 60 * 24));
+    }
+
+    set latestJobAge(days) {
+        // read-only
     }
 }
 

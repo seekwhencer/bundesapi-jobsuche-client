@@ -75,7 +75,6 @@ export default class SearchesFilter extends EventEmitter {
 
         if (searches.length === 0) {
             this.page.searches.open();
-            return;
         }
         this.render();
     }

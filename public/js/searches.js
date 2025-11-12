@@ -36,8 +36,15 @@ export default class Searches {
         div.innerHTML = `
         <input type="text" placeholder="Ort oder Postleitzahl" value="${search.location || ""}">
         <input type="text" placeholder="Suchbegriff" value="${search.search || ""}">
-        <input type="number" placeholder="Radius" max="200" min="0" value="${search.radius || ""}">
-        <input type="number" placeholder="Tage" max="30" min="0" value="${search.days || ""}">
+        <input type="number" placeholder="Radius" max="200" min="0" value="${search.radius || ""}"> `+
+        //`<input type="number" placeholder="Tage" max="30" min="0" value="${search.days || ""}"> `+
+        `<select>
+            <option value="0" ${search.days === 0 ? 'selected' : ''}>Heute</option>
+            <option value="1"${search.days === 1 ? 'selected' : ''}>Gestern</option>
+            <option value="7"${search.days === 7 ? 'selected' : ''}>1 Woche</option>
+            <option value="14"${search.days === 14 ? 'selected' : ''}>2 Wochen</option>
+            <option value="28"${search.days === 28 ? 'selected' : ''}>3 Wochen</option>
+        </select>
         <div class="search-actions">
           <button class="update">Speichern</button>
           <button class="trigger" ${!search ? 'disabled' : ''}>Start</button>
@@ -50,6 +57,13 @@ export default class Searches {
         div.querySelector(".delete").onclick = () => this.deleteSearch(search.id);
         div.querySelector(".delete-results").onclick = () => this.deleteSearchResults(search.id);
         this.listingElement.appendChild(div);
+
+        if(!search) {
+            this.listingElement.scrollTo({
+                top: this.listingElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     }
 
     async open() {
@@ -63,7 +77,8 @@ export default class Searches {
     }
 
     async updateSearch(id, div) {
-        let [location, search, radius, days] = div.querySelectorAll("input");
+        let [location, search, radius] = div.querySelectorAll("input");
+        let days = div.querySelector("select");
 
         if (location.value.trim() === '')
             return;
