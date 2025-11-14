@@ -44,7 +44,7 @@ export default class ListingCard extends EventEmitter {
         Object.keys(job).forEach(key => this.data[key] = job[key]);
 
         // render on create
-        this.render();
+        //this.render();
     }
 
     render() {
@@ -148,6 +148,10 @@ export default class ListingCard extends EventEmitter {
 
     set show(value) {
         this._show = value;
+
+        if (!this.element)
+            return;
+
         value !== true ? this.element.classList.add('hidden') : this.element.classList.remove('hidden');
     }
 }

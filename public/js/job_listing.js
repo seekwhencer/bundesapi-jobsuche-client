@@ -20,6 +20,7 @@ export default class JobListing extends EventEmitter {
          */
 
         this.filterElement.addEventListener("input", () => this.filterQuery.keyword = this.filterElement.value.toLowerCase());
+        this.filterElement.value = "";
         this.loadLikedBtn.onclick = () => this.filterByProperty('liked');
         this.loadIgnoredBtn.onclick = () => this.filterByProperty('ignored');
 
@@ -32,7 +33,9 @@ export default class JobListing extends EventEmitter {
         this.listingFilter.on('update', () => this.filter());
 
         this.on('load', () => {
-            this.jobs.sort((a, b) => new Date(b.modifikationsTimestamp) - new Date(a.modifikationsTimestamp));
+             this.jobs.sort((a, b) => {
+                return new Date(b.modifikationsTimestamp) - new Date(a.modifikationsTimestamp);
+            });
 
             // enrich by age in days
             this.jobs = this.jobs.map(job => {
@@ -41,12 +44,9 @@ export default class JobListing extends EventEmitter {
             });
 
             this.page.ageFilter.show();
-
+            this.render();
             this.filter();
-            this.filterElement.value = "";
         });
-
-        this.on('filtered', filtered => this.render(filtered));
 
         this.filterQuery.liked = undefined;
         this.filterQuery.ignored = false;
@@ -67,8 +67,9 @@ export default class JobListing extends EventEmitter {
         }
     }
 
-    render(jobs) {
-        // magic happens here
+    render() {
+        this.element.innerHTML = "";
+        this.jobs.forEach(job => job.render());
     }
 
     filter() {
@@ -83,7 +84,7 @@ export default class JobListing extends EventEmitter {
             }
 
             if (show && fq.keyword) {
-                if (!JSON.stringify(j).toLowerCase().includes(fq.keyword)) show = false;
+                if (!JSON.stringify(j.data).toLowerCase().includes(fq.keyword)) show = false;
             }
 
             if (show && fq.liked === true) {
