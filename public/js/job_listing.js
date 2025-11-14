@@ -1,5 +1,6 @@
 import EventEmitter from "./event_emitter.js";
 import ListingFilter from "./listing_filter.js";
+import ListingCard from "./listing_card.js";
 
 export default class JobListing extends EventEmitter {
     constructor(page) {
@@ -35,7 +36,8 @@ export default class JobListing extends EventEmitter {
 
             // enrich by age in days
             this.jobs = this.jobs.map(job => {
-                return {...job, ...{age: Math.floor((new Date() - new Date(job.modifikationsTimestamp)) / (1000 * 60 * 60 * 24))}};
+                job.age = Math.floor((new Date() - new Date(job.modifikationsTimestamp)) / (1000 * 60 * 60 * 24));
+                return job;
             });
 
             this.page.ageFilter.show();
@@ -55,7 +57,9 @@ export default class JobListing extends EventEmitter {
     async load() {
         try {
             const res = await fetch("/api/list");
-            this.jobs = await res.json();
+            const jobs = await res.json();
+            this.jobs = [];
+            jobs.forEach(job => this.jobs.push(new ListingCard(job, this)));
             this.emit('load');
         } catch (err) {
             this.element.innerHTML = "<p>Fehler beim Laden der Daten.</p>";
@@ -64,120 +68,57 @@ export default class JobListing extends EventEmitter {
     }
 
     render(jobs) {
-        jobs = jobs ? jobs : this.jobs
-        this.element.innerHTML = "";
-        for (const j of jobs) {
-            const div = document.createElement("div");
-            div.className = "card";
-
-            j.liked === true ? div.classList.add("liked") : null;
-            j.ignored === true ? div.classList.add("ignored") : null;
-
-            const sinceLabels = {
-                0: "Heute",
-                1: "Gestern",
-                7: "Vor 1 Woche",
-                14: "Vor 2 Wochen",
-                28: "Vor 3 Wochen"
-            }
-
-            div.innerHTML =
-                `<b>${esc(j.titel || j.beruf || "—")}</b>` +
-                `<div class="meta">${esc(j.arbeitgeber || "")} · ${esc(j.arbeitsort?.ort || "")}</div>` +
-                `<div class="date">${(new Date(j.modifikationsTimestamp)).toLocaleString("de-DE").split(', ')[0]}</div>` +
-                `<div class="searches">` +
-                `${Object.keys(j.searches).map(s => `<div class="search"><strong>${j.searches[s].location}</strong>${j.searches[s].radius ? ` (${j.searches[s].radius}km)` : ''}${j.searches[s].search ? ` - <strong>${j.searches[s].search}</strong>` : ''}${j.searches[s].days !== undefined ? `, ${sinceLabels[j.searches[s].days]}` : ''}</div>`).join("")}` +
-                `</div>` +
-                `<div class="actions"><button class="like">${j.liked ? '♥' : '♡'}</button><button class="ignore">☢</button></div>`;
-            div.onclick = (e) => this.select(j.id, div, e);
-            this.element.appendChild(div);
-        }
-    }
-
-
-    flushCards(card) {
-        this.element.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
-    }
-
-    async select(id, card, e) {
-        if (e.target.classList.contains('like'))
-            return await this.like(id, card, e.target);
-
-        if (e.target.classList.contains('ignore'))
-            return await this.ignore(id, card, e.target);
-
-        await this.detail.load(id, card);
-    }
-
-    async like(id, card, button) {
-        const res = await fetch(`/api/job/like/${encodeURIComponent(id)}`);
-        if (!res.ok) {
-            return;
-        }
-        const job = await res.json();
-        if (job.liked === true) {
-            card.classList.add('liked');
-            button.innerHTML = '♥';
-        } else {
-            card.classList.remove('liked');
-            button.innerHTML = '♡';
-        }
-        this.updateJob(id, {liked: job.liked});
-    }
-
-    async ignore(id, card, button) {
-        const res = await fetch(`/api/job/ignore/${encodeURIComponent(id)}`);
-        if (!res.ok) {
-            return;
-        }
-        const job = await res.json();
-        job.ignored === true ? card.classList.add('ignored') : card.classList.remove('ignored');
-        this.updateJob(id, {ignored: job.ignored});
-    }
-
-    updateJob(id, data) {
-        this.jobs.forEach((j, i) => {
-            if (j.id === id) {
-                this.jobs[i] = {...j, ...data};
-            }
-        });
+        // magic happens here
     }
 
     filter() {
-        let filtered = this.jobs;
+        const fq = this.filterQuery;
 
-        if (this.filterQuery.search)
-            filtered = filtered.filter((j) => {
+        this.jobs = this.jobs.map(j => {
+            let show = true;
+
+            if (fq.search) {
                 const searchIds = Object.keys(j.searches);
-                return searchIds.includes(this.filterQuery.search.id);
-            });
+                if (!searchIds.includes(fq.search.id)) show = false;
+            }
 
-        if (this.filterQuery.keyword)
-            filtered = filtered.filter((j) => JSON.stringify(j).toLowerCase().includes(this.filterQuery.keyword));
+            if (show && fq.keyword) {
+                if (!JSON.stringify(j).toLowerCase().includes(fq.keyword)) show = false;
+            }
 
-        if (this.filterQuery.liked === true)
-            filtered = filtered.filter((j) => j.liked === true);
+            if (show && fq.liked === true) {
+                if (j.liked !== true) show = false;
+            }
 
-        if (this.filterQuery.liked === false)
-            filtered = filtered.filter((j) => j.liked !== true);
+            if (show && fq.liked === false) {
+                if (j.liked === true) show = false;
+            }
 
-        if (this.filterQuery.ignored === true)
-            filtered = filtered.filter((j) => j.ignored === true);
+            if (show && fq.ignored === true) {
+                if (j.ignored !== true) show = false;
+            }
 
-        if (this.filterQuery.ignored === false)
-            filtered = filtered.filter((j) => j.ignored !== true);
+            if (show && fq.ignored === false) {
+                if (j.ignored === true) show = false;
+            }
 
-        if (this.filterQuery.jobTitle)
-            filtered = filtered.filter((j) => j.jobTitles.includes(this.filterQuery.jobTitle));
+            if (show && fq.jobTitle) {
+                if (!j.jobTitles.includes(fq.jobTitle)) show = false;
+            }
 
-        if (this.filterQuery.age_from !== undefined)
-            filtered = filtered.filter((j) => j.age >= this.filterQuery.age_from);
+            if (show && fq.age_from !== undefined) {
+                if (j.age < fq.age_from) show = false;
+            }
 
-        if (this.filterQuery.age_to !== undefined)
-            filtered = filtered.filter((j) => j.age <= this.filterQuery.age_to);
+            if (show && fq.age_to !== undefined) {
+                if (j.age > fq.age_to) show = false;
+            }
 
+            j.show = show;
+            return j;
+        });
 
-        this.emit('filtered', filtered);
+        this.emit('filtered', this.jobs);
     }
 
     filterByProperty(prop) {
@@ -208,6 +149,3 @@ export default class JobListing extends EventEmitter {
     }
 }
 
-function esc(s) {
-    return String(s ?? "").replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[c]));
-}

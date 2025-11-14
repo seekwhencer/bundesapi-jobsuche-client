@@ -4,18 +4,15 @@ export default class JobDetail {
         this.element = document.querySelector("#detail");
     }
 
-    async load(id, card) {
+    async load(job) {
         try {
-            const res = await fetch(`/api/job/${encodeURIComponent(id)}`);
+            const res = await fetch(`/api/job/${encodeURIComponent(job.data.id)}`);
             if (!res.ok) {
                 this.element.innerHTML = "<p>Job nicht gefunden.</p>";
                 this.element.style.display = "block";
                 return;
             }
             await this.render(res);
-            this.flushCards(card);
-            card.classList.add('selected');
-
         } catch (err) {
             this.element.innerHTML = "<p>Fehler beim Laden des Jobs.</p>";
         }
@@ -34,18 +31,14 @@ export default class JobDetail {
             (job.jobTitles.length > 0
                 ? `<ul class="job-titles">${job.jobTitles.map(j => `<li class="job-title">${j}</li>`).join('')}</ul>`
                 : "") +
-            (linksAndEmails.links ? `<div class="links">${linksAndEmails.links.map(l => `<a href="${esc(l)}" target="_blank">${l}</a>`).join("")}</div>` : "" ``) +
-            (linksAndEmails.emails ? `<div class="emails">${linksAndEmails.emails.map(e => `<button class="email">${e}</button>`).join("")}</div>` : "" ``) +
+            (linksAndEmails.links ? `<div class="links">${linksAndEmails.links.map(l => `<a href="${esc(l)}" target="_blank">${l}</a>`).join("")}</div>` : ""``) +
+            (linksAndEmails.emails ? `<div class="emails">${linksAndEmails.emails.map(e => `<button class="email">${e}</button>`).join("")}</div>` : ""``) +
             (job.description
                 ? `<div class="description">${linkifyAndItalicize(job.description.replaceAll("\n", '<br>').replaceAll("<br><br><br>", '<br><br>'))}</div>`
                 : "") +
-            `<hr>`+
+            `<hr>` +
             `${job.externeUrl ? `<a href="${job.externeUrl}" target="_blank">Externer Link zum Job</a>` : ''}` +
             `<details><summary>Rohdaten</summary><pre>${JSON.stringify(job, null, '\t').replaceAll('\\n', "\n")}</pre></details>`;
-    }
-
-    flushCards(card) {
-        this.page.listing.flushCards(card);
     }
 }
 
@@ -71,7 +64,7 @@ function linkifyAndItalicize(text) {
 }
 
 function extractLinksAndEmails(text) {
-    if (!text) return { links: [], emails: [] };
+    if (!text) return {links: [], emails: []};
 
     const emailPattern = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
     const urlPattern = /\b((https?:\/\/)|(www\.))[^\s<]+[^<.,:;"')\]\s]/gi;
@@ -82,5 +75,5 @@ function extractLinksAndEmails(text) {
     // Fehlendes Protokoll ergänzen
     const links = rawLinks.map(l => (l.startsWith("http") ? l : `https://${l}`)) || false;
 
-    return { links, emails };
+    return {links, emails};
 }

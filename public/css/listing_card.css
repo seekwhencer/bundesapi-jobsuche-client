@@ -8,6 +8,10 @@
         padding: 10px 80px 10px 10px;
         position: relative;
 
+        &.hidden {
+            display: none;
+        }
+
         &:hover {
             background: var(--light-bg);
 

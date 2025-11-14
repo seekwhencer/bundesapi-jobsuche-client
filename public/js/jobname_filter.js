@@ -16,7 +16,7 @@ export default class JobNameFilter extends Event {
         let names = [];
         let count = {};
         filtered.forEach(j => {
-            if (j.jobTitles.length > 0) {
+            if (j.jobTitles.length > 0 && j.show === true) {
                 j.jobTitles.forEach(title => {
                     if (!names.includes(title)) {
                         names.push(title);
@@ -34,6 +34,11 @@ export default class JobNameFilter extends Event {
                 if (valB !== valA) return valB - valA;
                 return keyA.localeCompare(keyB);
             });
+
+        // set the structured data
+        this.data = count.map(n => {
+            return {id: n[0], value: n[1]}
+        });
 
         this.element.innerHTML = '';
 

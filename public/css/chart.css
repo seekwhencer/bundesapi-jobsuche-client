@@ -1,0 +1,42 @@
+.detail {
+    svg {
+        display: block;
+        font: 500 8px var(--font-family);
+        color: white;
+        margin: auto;
+        height: 100% !important;
+        width: 100% !important;
+
+
+        text {
+
+            tspan {
+                fill: white;
+            }
+        }
+
+        > g {
+
+        }
+
+        g {
+            g {
+                cursor: pointer;
+
+
+                &:hover {
+                    z-index: 1000;
+
+                    circle {
+                        transform: scale(1.3);
+
+                    }
+
+                    text {
+                        transform: scale(1.3);
+                    }
+                }
+            }
+        }
+    }
+}

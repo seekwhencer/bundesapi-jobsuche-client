@@ -5,6 +5,7 @@ import SearchesFilter from './searches_filter.js';
 import JobNameFilter from './jobname_filter.js';
 import AgeFilter from "./age_filter.js";
 import WebsocketClient from "./websocket.js";
+import Chart from './chart.js';
 
 export default class Page {
     constructor() {
@@ -16,6 +17,7 @@ export default class Page {
         this.ageFilter = new AgeFilter(this);
         this.jobNameFilter = new JobNameFilter(this);
         this.ws = new WebsocketClient(this);
+        this.chart = new Chart(this);
 
         this.toggleDayNighButton = document.querySelector('#toggle-day-night');
         this.toggleDayNighButton.onclick = () => this.toggleDayNight();

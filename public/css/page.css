@@ -6,6 +6,7 @@
 @import 'jobnames_filter.css';
 @import 'modal.css';
 @import 'age_filter.css';
+@import 'chart.css';
 
 body {
     font-family: var(--font-family);
