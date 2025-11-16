@@ -2,33 +2,47 @@
     width: 20vw;
     overflow: hidden;
     position: fixed;
-}
 
-.searches-filter {
-    padding: 20px 0;
-    z-index: 999;
-    border-top: 1px solid var(--light-border-color);
-    border-bottom: 1px solid var(--light-border-color);
-    text-align: center;
-    width: 20vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-height: calc(50vh - 200px);
-    overflow-y: scroll;
-    font-size: 12px;
 
-    button {
-        padding: 3px 10px;
-        margin: 0 0 5px 0;
-        display: block;
+    .searches-filter {
+        position: relative;
+        padding: 20px 0;
+        z-index: 999;
+        border-top: 1px solid var(--light-border-color);
+        border-bottom: 1px solid var(--light-border-color);
+        text-align: center;
+        width: 20vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-height: calc(50vh - 200px);
+        overflow-y: scroll;
+        font-size: 12px;
 
-        &:last-child {
-            margin: 0;
+        button {
+            padding: 3px 10px;
+            margin: 0 0 5px 0;
+            display: block;
+
+            &:last-child {
+                margin: 0;
+            }
+
+            &.selected {
+                background-color: var(--color-secondary);
+            }
         }
+    }
 
-        &.selected {
-            background-color: var(--color-secondary);
+    .searches-actions {
+        text-align: center;
+        display: block;
+        overflow: hidden;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--light-border-color);
+
+        .open-modal {
+
         }
     }
 }

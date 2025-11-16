@@ -6,9 +6,11 @@ import JobNameFilter from './jobname_filter.js';
 import AgeFilter from "./age_filter.js";
 import WebsocketClient from "./websocket.js";
 import Chart from './chart.js';
+import Users from './users.js';
 
 export default class Page {
     constructor() {
+        this.users = new Users(this);
         this.jobs = [];
         this.detail = new JobDetails(this);
         this.listing = new JobListing(this);

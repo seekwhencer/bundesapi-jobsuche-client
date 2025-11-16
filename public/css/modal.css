@@ -1,4 +1,4 @@
-#modal {
+.modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -11,39 +11,91 @@
         font-size: 20px;
         margin-top: 0;
     }
-}
 
-#modal-content {
-    background: var(--page-bg);
-    padding: 20px;
-    border-radius: 10px;
-    width: 900px;
-    max-height: 80vh;
-    z-index: 2000;
-    position: relative;
+    .modal-content {
+        background: var(--page-bg);
+        padding: 20px;
+        border-radius: 10px;
+        width: 900px;
+        max-height: 80vh;
+        z-index: 2000;
+        position: relative;
 
-    h2 {
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: calc(100% - 40px);
-        background-color: var(--page-bg);
-        margin: 0;
-        line-height: 50px;
-        padding: 0 20px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
+        input {
+            display: inline-block;
+            margin: 0;
+            padding: 6px;
+            font-family: var(--font-family);
+            color: var(--text-color);
+            border: 1px solid var(--light-border-color);
+            background-color: var(--light-med-bg);
+            border-radius: 3px;
+        }
+
+        h2 {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% - 40px);
+            background-color: var(--page-bg);
+            margin: 0;
+            line-height: 50px;
+            padding: 0 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .server-logs {
+            position: absolute;
+            bottom: -100px;
+            height: 100px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: calc(100% - 20px);
+            left: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            overflow-y: scroll;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            color: #ddd;
+            z-index: 1999;
+
+            .logs-stream {
+                overflow-y: scroll;
+                max-height: 80px;
+                margin: 10px;
+                font-weight: 700;
+            }
+        }
     }
 
-    .searches-listing {
+    .modal-listing {
         overflow-y: scroll;
         max-height: 50vh;
         margin-top: 30px;
         margin-bottom: 50px;
+
+        .row-actions {
+            display: inline-block;
+            right: 0;
+            position: absolute;
+            top: 8px;
+
+            button {
+                background: var(--color-primary);
+                border: none;
+                font-family: var(--font-family);
+                border-radius: 3px;
+                cursor: pointer;
+                color: white;
+                font-size: 12px;
+                font-weight: 500;
+            }
+        }
     }
 
-    .searches-footer {
+    .modal-footer {
         position: absolute;
         bottom: 0;
         left: 0;
@@ -61,86 +113,13 @@
         }
     }
 
-    .server-logs {
+    .close-modal {
         position: absolute;
-        bottom: -100px;
-        height: 100px;
-        background-color: rgba(0, 0, 0, 0.5);
-        width: calc(100% - 20px);
-        left: 10px;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-        overflow-y: scroll;
-        font-size: 11px;
-        font-family: 'Courier New', monospace;
-        color: #ddd;
-        z-index: 1999;
-
-        .logs-stream {
-            overflow-y: scroll;
-            max-height: 80px;
-            margin: 10px;
-            font-weight: 700;
-        }
-    }
-}
-
-.searches-actions {
-    padding: 20px 0;
-    text-align: center;
-    border-bottom: 1px solid var(--light-border-color);;
-}
-
-#close-modal {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 10px;
-    background-color: var(--light-med-bg);
-    color: var(--text-color);
-}
-
-
-.search-dataset {
-    border-bottom: 1px solid var(--light-border-color);
-    padding: 10px 0;
-    position: relative;
-
-    input {
-        display: inline-block;
-        margin: 0;
-        padding: 6px;
-        font-family: var(--font-family);
-        color: var(--text-color);
-        border: 1px solid var(--light-border-color);
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 10px;
         background-color: var(--light-med-bg);
-        border-radius: 3px;
-
-        &:nth-child(1), &:nth-child(2) {
-            width: 15%;
-        }
-
-        &:nth-child(3), &:nth-child(4) {
-            width: 10%;
-            text-align: center;
-        }
+        color: var(--text-color);
     }
 
-    .search-actions {
-        display: inline-block;
-        right: 0;
-        position: absolute;
-        top: 8px;
-
-        button {
-            background: var(--color-primary);
-            border: none;
-            font-family: var(--font-family);
-            border-radius: 3px;
-            cursor: pointer;
-            color: white;
-            font-size: 12px;
-            font-weight: 500;
-        }
-    }
 }

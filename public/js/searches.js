@@ -2,9 +2,9 @@ export default class Searches {
     constructor(page) {
         this.page = page;
         this.listing = page.listing
-        this.modal = document.querySelector("#modal");
-        this.openBtn = document.querySelector("#open-modal");
-        this.closeBtn = document.querySelector("#close-modal");
+        this.modal = document.querySelector("#modal-searches");
+        this.openBtn = document.querySelector("#open-modal-searches");
+        this.closeBtn = document.querySelector("#close-modal-searches");
         this.addBtn = document.querySelector("#add-search");
         this.listingElement = document.querySelector("#searches-listing");
         this.serverLogsElement = document.querySelector("#server-logs-stream");
@@ -45,7 +45,7 @@ export default class Searches {
             <option value="14"${search.days === 14 ? 'selected' : ''}>2 Wochen</option>
             <option value="28"${search.days === 28 ? 'selected' : ''}>3 Wochen</option>
         </select>
-        <div class="search-actions">
+        <div class="row-actions">
           <button class="update">Speichern</button>
           <button class="trigger" ${!search ? 'disabled' : ''}>Start</button>
           <button class="delete">Suche löschen</button>
