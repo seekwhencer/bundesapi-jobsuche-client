@@ -7,18 +7,19 @@ export default class Chart {
         this.listing = this.page.listing;
 
         this.listing.on('filtered', () => this.render(this.page.jobNameFilter.data));
+
+        this.toolTip = document.createElement('div');
+        this.toolTip.className = 'toolTip';
+
     }
 
     render(data) {
         this.element.innerHTML = '';
+        this.element.append(this.toolTip);
+        this.toolTip.innerHTML = this.page.listing.filterQuery.jobTitle || 'Alle Berufe';
+
         const svg = this.renderBubbleChart(data);
         svg ? this.element.append(svg) : null;
-        const circles = svg.querySelectorAll('circle');
-        circles.forEach(c => c.onclick = () => {
-            const title = c.parentNode.querySelector('title').textContent;
-            const jobName = title.split('\n')[0];
-            this.page.listing.filterQuery.jobTitle = jobName;
-        });
     }
 
     renderPieChart(data) {
@@ -70,7 +71,7 @@ export default class Chart {
             .attr("fill", d => color(d.data.name))
             .attr("d", arc)
             .append("title")
-            .text(d => `${d.data.name}: ${d.data.value.toLocaleString("en-US")}`);
+            .text(d => `${d.data.name}: ${d.data.value.toLocaleString("de-DE")}`);
 
         // Create a new arc generator to place a label close to the edge.
         // The label shows the value if there is enough room.
@@ -118,6 +119,9 @@ export default class Chart {
             const startColor = getComputedStyle(document.documentElement).getPropertyValue('--color-secondary'); // grün
             const endColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary');
 
+            const toolTip = document.createElement("div");
+
+
             // Min/Max der Werte bestimmen
             const valueExtent = d3.extent(data, d => d.value);
 
@@ -151,22 +155,24 @@ export default class Chart {
                 .join("g")
                 .attr("transform", d => `translate(${d.x},${d.y})`);
 
+            // interaction
+            node.on('mouseenter', (e) => this.hoverNode(e.target));
+            node.on('click', (e) => this.selectNode(e.target));
+            node.on('mouseleave', (e) => this.resetNode(e.target));
+
             // Add a title.
             node.append("title")
                 .text(d => `${d.data.id}\n${format(d.value)}`);
 
             // Add a filled circle.
-            node.append("circle")
+            const circle = node.append("circle")
                 .attr("fill", d => color(d.value))
                 .attr("r", d => d.r)
                 .attr("fill-opacity", d => clamp(d) ? 1 : 0.5);
 
-            // Add a label.
             const text = node.append("text")
                 .attr("clip-path", d => `circle(${d.r})`);
 
-
-            // Add a tspan for each CamelCase-separated word.
             text.selectAll()
                 .data(d => d)
                 .join("tspan")
@@ -174,7 +180,6 @@ export default class Chart {
                 .attr("y", (d, i, nodes) => `${i - nodes.length / 2 + 0.35}em`)
                 .text(d => clamp(d) ? d.data.id : '');
 
-            // Add a tspan for the node’s value.
             text.append("tspan")
                 .attr("x", 0)
                 //.attr("y", d => `${names(d.data).length / 2 + 0.35}em`)
@@ -183,5 +188,26 @@ export default class Chart {
 
             return Object.assign(svg.node(), {scales: {color}});
         }
+    }
+
+    hoverNode(element) {
+        clearTimeout(this.leaveTimeout);
+        const title = element.closest('g').querySelector('title').textContent;
+        const jobName = title.split('\n');
+        this.toolTip.innerHTML = `${jobName[0]}`;
+    }
+
+    selectNode(element) {
+        const title = element.closest('g').querySelector('title').textContent;
+        const jobName = title.split('\n');
+        this.page.listing.filterQuery.jobTitle = jobName[0];
+    }
+
+    resetNode() {
+        clearTimeout(this.leaveTimeout);
+        this.leaveTimeout = setTimeout(() => {
+            this.toolTip.innerHTML = this.page.listing.filterQuery.jobTitle || 'Alle Berufe';
+        } , 400);
+        //this.page.listing.filterQuery.jobTitle = this.page.listing.filterQuery.jobTitle || '';
     }
 }

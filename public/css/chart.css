@@ -1,4 +1,21 @@
 .detail {
+    .toolTip {
+        position: absolute;
+        top: 50px;
+        left: 20px;
+        width: auto;
+        height: auto;
+        padding: 5px 20px;
+        font: 24px var(--font-family);
+        text-transform: uppercase;
+        font-weight: 700;
+        background: var(--light-bg);
+        border: 0;
+        border-radius: 8px;
+        pointer-events: none;
+        color: var(--color-text);
+    }
+
     svg {
         display: block;
         font: 500 8px var(--font-family);
